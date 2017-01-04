@@ -1,0 +1,329 @@
+﻿{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "vmName": {
+      "type": "string"
+    },
+    "vmSize": {
+      "type": "string",      
+      "defaultValue": "Standard_DS2_v2"
+    },
+    "assetLocation": {
+      "type": "string",
+      "metadata": {
+        "description": "The artifacts location URI"
+      }
+    },
+    "FileShareUserName": {
+      "type": "string",
+      "metadata": {
+        "description": "User name for file share"
+      }
+    },
+    "FileSharePassword": {
+      "type": "securestring",
+      "metadata": {
+        "description": "Password for file share"
+      }
+    },
+    "AdminUserName": {
+      "type": "string",
+      "metadata": {
+        "description": "User name of local admin for SQL Server Setup"
+      }
+    },
+    "AdminPassword": {
+      "type": "securestring",
+      "metadata": {
+        "description": "Password of local admin for SQL Server Setup"
+      }
+    },
+    "SQLAgentUserName": {
+      "type": "string",
+      "metadata": {
+        "description": "User name for SQL Server Agent"
+      }
+    },
+    "SQLAgentPassword": {
+      "type": "securestring",
+      "metadata": {
+        "description": "Password for SQL Server Agent"
+      }
+    },
+    "SQLSAAccountPassword": {
+      "type": "securestring",
+      "metadata": {
+        "description": "Password for SQL Server SA Account"
+      }
+    },
+    "SQLServiceUserName": {
+      "type": "string",
+      "metadata": {
+        "description": "User name for SQL Server Service"
+      }
+    },
+    "SQLServicePassword": {
+      "type": "securestring",
+      "metadata": {
+        "description": "Password for SQL service"
+      }
+    },
+    "DomainUserName": {
+      "type": "string",
+      "metadata": {
+        "description": "User name for AD Domain"
+      }
+    },
+    "DomainPassword": {
+      "type": "securestring",
+      "metadata": {
+        "description": "Password for AD user"
+      }
+    },
+    "InstallDir": {
+      "type": "string",
+      "metadata": {
+        "description": "Install directory on the file share"
+      }
+    },
+    "PackagePath": {
+      "type": "string",
+      "metadata": {
+        "description": "UNC path for file share"
+      }    },
+    "location": {
+      "type": "string",      
+      "metadata": {
+        "description": "Region in which to deploy the new resources"
+      }
+    },
+
+    "Features": {
+      "type": "string",
+      "metadata": {
+        "description": "The installation features for SQL Server"
+      },
+      "defaultValue": "SQLENGINE,FULLTEXT"
+    },
+    "UpdateSource": {
+      "type": "string",
+      "metadata": {
+        "description": "The type of update source"
+      },
+      "defaultValue": "MU"
+    },
+    "UpdateEnabled": {
+      "type": "string",
+      "metadata": {
+        "description": "Enable/Disable SQL Server update"
+      },
+      "defaultValue": "False"
+    },
+    "InstallSharedDir": {
+      "type": "string",
+      "metadata": {
+        "description": "The common installation directory for SQL Server"
+      },
+      "defaultValue": "C:\\Program Files\\Microsoft SQL Server"
+    },
+    "InstallSharedWOWDir": {
+      "type": "string",
+      "metadata": {
+        "description": "The 32-bit installation directory for SQL Server"
+      },
+      "defaultValue": "C:\\Program Files (x86)\\Microsoft SQL Server"
+    },
+    "SQLInstanceName": {
+      "type": "string",
+      "metadata": {
+        "description": "The instance name for SQL Server"
+      },
+      "defaultValue": "default"
+    },
+    "SQLInstanceDir": {
+      "type": "string",
+      "metadata": {
+        "description": "The instance directory for SQL Server"
+      }
+    },
+    "SecurityMode": {
+      "type": "string",
+      "metadata": {
+        "description": "The security mode for SQL Server"
+      },      
+      "defaultValue": "Windows"
+    },
+    "SQLSysAdminAccounts": {
+      "type": "string",
+      "metadata": {
+        "description": "The users/groups that will be sysadmins for SQL Server"
+      },
+      "defaultValue": "BUILTIN\\Administrators"
+    },
+    "existingDomainName": {
+      "type": "string",
+      "metadata": {
+        "description": "The existing AD domain of the SQL Server"
+      }
+    },
+    "existingOUPath": {
+      "type": "string",
+      "metadata": {
+        "description": "The existing OU for the SQL Server"
+      }
+    },
+    "existingVirtualNetworkName": {
+      "type": "string",     
+      "metadata": {
+        "description": "Name of the existing VNET"
+      }
+    },
+    "existingVirtualNetworkResourceGroup": {
+      "type": "string",      
+      "metadata": {
+        "description": "Name of the existing VNET resource group"
+      }
+    },
+    "subnetName": {
+      "type": "string",    
+      "metadata": {
+        "description": "Name of the subnet in the virtual network you want to use"
+      }
+    },
+    "storageAccountUri": {
+      "type": "string",
+      "metadata": {
+        "description": "Storage Account URI (e.g. https://storageaccount.blob.core.windows.net)"
+      }
+    },
+    "bootdiagnosticsstorageAccountUri": {
+      "type": "string",
+      "metadata": {
+        "description": "Storage Account URI (e.g. https://storageaccount.blob.core.windows.net)"
+      }
+    },
+    "windowsOSVersion": {
+      "type": "string",
+      "defaultValue": "2012-R2-Datacenter",     
+      "metadata": {
+        "description": "The Windows version for the VM. This will pick a fully patched image of this given Windows version."
+      }
+    }    
+  },
+  "variables": {
+    "apiVersion": "2015-01-01",
+    "apiVersionNetworks": "2015-06-15",
+    "apiVersionVirtualMachines": "2015-06-15",
+    "apiVersionVMExtensions": "2015-06-15",
+    "apiVersionStorage": "2015-06-15",
+    "assetLocation": "[parameters('assetLocation')]",
+    "sqlDSCModuleUrl": "[concat(parameters('assetLocation'), 'SQLInstall.ps1.zip')]",
+    "sqlDSCConfigurationFunction": "SQLInstall.ps1\\SQLInstall",
+    "domainName": "[parameters('existingDomainName')]",
+    "OUPath": "[parameters('existingOUPath')]",
+    "deployWindowsVMTemplateUrl": "[concat(parameters('assetLocation'),'DeployWindowsVM.json')]",
+    "deployWindowsVM": "deployWindowsVM",
+    "deployWindowsVmId": "[concat('Microsoft.Compute/VirtualMachines/', parameters('vmName'))]"
+
+  },
+
+  "resources": [
+    {
+      "name": "[variables('deployWindowsVM')]",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "[variables('apiVersion')]",
+    
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[variables('deployWindowsVMTemplateUrl')]",
+          "contentVersion": "1.0.0.0"
+        },
+
+        "parameters": {
+          "location": { "value": "[parameters('location')]" },
+          "AdminUserName": { "value": "[parameters('AdminUserName')]" },
+          "adminPassword": { "value": "[parameters('adminPassword')]" },
+          "storageAccountUri": { "value": "[parameters('storageAccountUri')]" },
+          "existingVirtualNetworkName": { "value": "[parameters('existingVirtualNetworkName')]" },
+          "existingVirtualNetworkResourceGroup": { "value": "[parameters('existingVirtualNetworkResourceGroup')]" },         
+          "subnetName": { "value": "[parameters('subnetName')]" },
+          "vmName": { "value": "[parameters('vmName')]" },
+          "vmSize": { "value": "[parameters('vmSize')]" },
+          "bootdiagnosticsstorageAccountUri": { "value": "[parameters('bootdiagnosticsstorageAccountUri')]" }
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Compute/virtualMachines/extensions",
+      "name": "[concat(parameters('vmName'),'/SQLInstall')]",
+      "apiVersion": "[variables('apiVersionVMExtensions')]",
+      "location": "[parameters('location')]",
+      "dependsOn": [
+        "[variables('deployWindowsVM')]" 
+      ],
+      "properties": {
+        "publisher": "Microsoft.Powershell",
+        "type": "DSC",
+        "typeHandlerVersion": "2.20",
+        "autoUpgradeMinorVersion": true,
+        "settings": {
+          "wmfVersion": "latest",
+          "modulesUrl": "[variables('sqlDSCModuleUrl')]",
+          "configurationFunction": "[variables('sqlDSCConfigurationFunction')]",
+          "properties": {
+            "PackagePath": "[parameters('PackagePath')]",
+            "AdminCreds": {
+              "UserName": "[parameters('AdminUserName')]",
+              "Password": "PrivateSettingsRef:adminPassword"
+            },
+            "DomainCreds": {
+              "UserName": "[parameters('DomainUserName')]",
+              "Password": "PrivateSettingsRef:DomainPassword"
+            },
+            "FileShareCreds": {
+              "UserName": "[parameters('FileShareUserName')]",
+              "Password": "PrivateSettingsRef:fileSharePassword"
+            },
+            "SQLAgentCreds": {
+              "UserName": "[parameters('SQLAgentUserName')]",
+              "Password": "PrivateSettingsRef:sqlAgentPassword"
+            },
+            "SQLServiceCreds": {
+              "UserName": "[parameters('SQLServiceUserName')]",
+              "Password": "PrivateSettingsRef:sqlServicePassword"
+            },
+            "SQLSAAccountCreds": {
+              "UserName": "sa",
+              "Password": "PrivateSettingsRef:sqlSAAccountPassword"
+            },
+
+            "InstallDir": "[parameters('InstallDir')]",
+            "Features": "[parameters('Features')]",
+            "UpdateSource": "[parameters('UpdateSource')]",
+            "UpdateEnabled": "[parameters('UpdateEnabled')]",
+            "InstallSharedDir": "[parameters('InstallSharedDir')]",
+            "InstallSharedWOWDir": "[parameters('InstallSharedWOWDir')]",
+            "SQLInstanceName": "[parameters('SQLInstanceName')]",
+            "SQLInstanceDir": "[parameters('SQLInstanceDir')]",
+            "SecurityMode": "[parameters('SecurityMode')]",
+            "SQLSysAdminAccounts": "[parameters('SQLSysAdminAccounts')]",
+            "DomainName": "[variables('domainName')]",
+            "OUPath": "[variables('OUPath')]"            
+          }
+        },
+        "protectedSettings": {
+          "items": {
+            "adminPassword": "[parameters('AdminPassword')]",
+            "domainPassword": "[parameters('DomainPassword')]",
+            "fileSharePassword": "[parameters('FileSharePassword')]",
+            "sqlAgentPassword": "[parameters('SQLAgentPassword')]",
+            "sqlServicePassword": "[parameters('SQLServicePassword')]",
+            "sqlSAAccountPassword": "[parameters('SQLSAAccountPassword')]"
+          }
+        }
+      }
+    }
+  ]
+}
