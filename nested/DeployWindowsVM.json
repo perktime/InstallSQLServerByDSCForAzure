@@ -1,0 +1,195 @@
+﻿{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "vmName": {
+      "type": "string"
+    },
+    "vmSize": {
+      "type": "string",    
+      "defaultValue": "Standard_DS2_v2"
+    },
+    "adminUserName": {
+      "type": "string"
+    },
+    "adminPassword": {
+      "type": "securestring"
+    },
+    "existingVirtualNetworkName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the existing VNET"
+      }
+    },
+    "existingVirtualNetworkResourceGroup": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the existing VNET resource group"
+      }
+    },
+    "subnetName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the subnet in the virtual network you want to use"
+      }
+    },
+    "location": {
+      "type": "string",
+      "metadata": {
+        "description": "Location of Azure region"
+      }
+    },    
+    "bootdiagnosticsstorageAccountUri": {
+      "type": "string",
+      "metadata": {
+        "description": "Storage Account URI (e.g. https://storageaccount.blob.core.windows.net)"
+      }
+    },
+    "windowsOSVersion": {
+      "type": "string",
+      "defaultValue": "2016-Datacenter",    
+      "metadata": {
+        "description": "The Windows version for the VM. This will pick a fully patched image of this given Windows version"
+      }
+    },
+    "numDataDisks": {
+      "type": "int",
+      "metadata": {
+        "description": "The number of disks to add to the VM. These disks will have ReadOnly caching enabled"
+      }
+    },
+    "numLogDisks": {
+      "type": "int",
+      "metadata": {
+        "description": "The number of disks to add to the VM. These disks will have no caching enabled"
+      }
+    },
+    "osDiskSizeGB": {
+      "type":"int",
+      "metadata": {
+        "description": "The size of the OS Disk for the VM"
+      }
+    },
+    "dataDiskSizeGB": {
+      "type":"int",
+      "metadata": {
+        "description": "The size of the disk(s) to add to the VM"
+      }
+    },
+    "licenseType" : {
+      "type" : "string",
+      "allowedValues": [
+        "Windows_Server",
+        ""
+      ],
+      "metadata": {
+        "description" : "The Windows license type"
+      },
+      "defaultValue": "Windows_Server"
+    },
+    "zones": {
+      "type": "array",
+      "metadata": {
+        "description": "The availability zone for the VM"
+      }
+    }
+  },
+  "variables": {
+    "vnetID": "[resourceId(parameters('existingVirtualNetworkResourceGroup'), 'Microsoft.Network/virtualNetworks', parameters('existingVirtualNetworkName'))]",
+    "subnetRef": "[concat(variables('vnetID'),'/subnets/', parameters('subnetName'))]",
+    "nicName": "[concat(parameters('vmName'),'-nic-01')]",
+    "imagePublisher": "MicrosoftWindowsServer",
+    "imageOffer": "WindowsServer",
+    "numDisks" : "[add(parameters('numDataDisks'), parameters('numLogDisks'))]",
+    
+    "apiVersionVMExtensions": "2018-10-01"  
+  },
+  "resources": [
+    {
+      "apiVersion": "2018-12-01",
+      "type": "Microsoft.Network/networkInterfaces",
+      "name": "[variables('nicName')]",
+      "location": "[parameters('location')]",
+      "tags": {
+        "displayName": "NetworkInterface"             
+      },
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "ipconfig1",
+            "properties": {
+              "privateIPAllocationMethod": "Dynamic", 
+              "subnet": {
+                "id": "[variables('subnetRef')]"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "2018-10-01",
+      "name": "[parameters('vmName')]",
+      "type": "Microsoft.Compute/virtualMachines",
+      "location": "[parameters('location')]",
+      "zones" : "[parameters('zones')]",
+      "dependsOn": [
+        "[concat('Microsoft.Network/networkInterfaces/', variables('nicName'))]"
+      ],    
+      "properties": {
+        "diagnosticsProfile": {
+          "bootDiagnostics": {
+            "enabled": true,
+            "storageUri": "[parameters('bootdiagnosticsstorageAccountUri')]"
+          }
+        },
+        "licenseType": "[parameters('licenseType')]",
+        "hardwareProfile": {
+          "vmSize": "[parameters('vmSize')]"
+        },
+        "networkProfile": {
+          "networkInterfaces": [
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces',variables('nicName'))]"
+            }
+          ]
+        },
+        "osProfile": {
+          "computerName": "[parameters('vmName')]",
+          "adminUsername": "[parameters('adminUsername')]",
+          "adminPassword": "[parameters('adminPassword')]"
+        },
+        "storageProfile": {
+          "imageReference": {
+            "publisher": "[variables('imagePublisher')]",
+            "offer": "[variables('imageOffer')]",
+            "sku": "[parameters('windowsOSVersion')]",
+            "version": "latest"
+
+          },
+          "osDisk": {
+            "name": "[parameters('vmName')]",
+            "managedDisk":{
+              "storageAccountType":"Premium_LRS" 
+            },            
+            "diskSizeGB" : "[parameters('osDiskSizeGB')]",
+            "caching": "ReadWrite",
+            "createOption": "FromImage"
+          },
+          "copy": [
+            {
+              "name": "dataDisks",
+              "count": "[variables('numDisks')]",
+              "input": {
+                "diskSizeGB": "[parameters('dataDiskSizeGB')]",
+                "lun": "[copyIndex('dataDisks')]",
+                "caching" : "[if(less(copyIndex('dataDisks'), parameters('numDataDisks')), 'ReadOnly', 'None')]",
+                "createOption": "Empty"
+              }
+            }
+          ]      
+        }
+      }
+    }
+  ]
+}

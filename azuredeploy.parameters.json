@@ -4,106 +4,190 @@
   "parameters": {
 
     "vmName": {
-      "value": "<VMNAME>"
+      "value": "petedb08"
     },
     "vmSize": {
-      "value": "Standard_DS3_v2"
+      "value": "Standard_DS4_v2"
     },
-    "assetLocation": {
-      "value": "https://petedscutil.blob.core.windows.net/scripts/"
+    "numDataDisks": {
+     "value" : 16
     },
-    "AdminUserName": {
-      "value": "<ADMINUSERNAME>"
+    "numLogDisks": {
+     "value" : 4
     },
-    "AdminPassword": {
-      "value": "<PASSWORD>"
+    "osDiskSizeGB": {
+     "value": 1023
     },
-    "DomainUserName": {
-      "value": "<DOMAIN\\USERNAME>"
+    "dataDiskSizeGB": {
+     "value" : 1023  
     },
-    "DomainPassword": {
-      "value": "<DOMAIN_PASSWORD>"
+    "dataDiskLetters" : {
+      "value" : [
+        "F",
+        "G",
+        "H",
+        "J",
+        "K",
+        "O",
+        "T"
+      ]
+    },
+    "dataDiskSizes" : {
+      "value" : [
+        "1023",
+        "1023",
+        "3069",
+        "3069",
+        "3069",
+        "1533",
+        "2046"
+      ]
+    },
+    "logDiskLetters" : {
+      "value" : [
+        "I",
+        "M"
+      ]
+    },
+    "logDiskSizes" : {
+      "value" : [
+        "1500",
+        "1500"
+      ]
+    },
+    "_artifactsLocation": {
+      "value": "https://peteafs01.blob.core.windows.net/sqlinstall"
+    },
+    "_artifactsLocationSasToken" :{
+      "value" : "?st=2019-04-29T21%3A29%3A32Z&se=2020-02-15T21%3A29%3A00Z&sp=rl&sv=2018-03-28&sr=c&sig=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+    },
+    "adminUserName": {
+      "value": "peteadmin"
+    },
+    "adminPassword": {
+      "value": "XXXXXXXX"
+    },
+    "domainUserName": {
+      "value": "petetest.ocp\\peteadmin"
+    },
+    "domainPassword": {
+      "value": "XXXXXXXXXX"
     },
     "existingDomainName": {
-      "value": "<DOMAINNAME>"
+      "value": "petetest.ocp"
     },
     "existingOUPath": {
       "value": ""
     },
     "existingVirtualNetworkName": {
-      "value": "<VNETNAME>"
+      "value": "petevnet01"
     },
     "existingVirtualNetworkResourceGroup": {
-      "value": "<VNET_RESOURCE_GROUP>"
-    },
-    "storageAccountUri": {
-      "value": "https://storageaccounturi.blob.core.windows.net"
-    },
+      "value": "peterg01"
+    },    
     "bootdiagnosticsstorageAccountUri": {
-      "value": "https://storageaccounturi.blob.core.windows.net"
+      "value": "https://petebootdiag01.blob.core.windows.net"
     },
     "windowsOSVersion": {
-      "value": "2012-R2-Datacenter"
+      "value": "2016-Datacenter"
     },
     "subnetName": {
-      "value": "default"
+      "value": "db01"
     },
-    "FileShareUserName": {
-      "value": "<AZUREFILESSHAREUSERNAME>"
+    "fileShareUserName": {
+      "value": "Azure\\peteafs01"
     },
-    "FileSharePassword": {
-      "value": "<STORAGEACCOUNTFILESHAREPASSWORD>"
+    "fileSharePassword": {
+      "value": "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
     },
-    "InstallDir": {
-      "value": ""
+    "installDir": {
+      "value": "sqlserver"
     },
-    "PackagePath": {
-      "value": "\\\\<AZUREFILESURI>.file.core.windows.net\\<installpath>"
+    "packagePath": {
+      "value": "\\\\peteafs01.file.core.windows.net\\installs"
     },
     "location": {
-      "value": "<LOCATION>"
+      "value": "centralus"
     },
-    "SQLAgentUserName": {
-      "value": "<DOMAIN\\USERNAME>"
+    "sqlAgentUserName": {
+      "value": "petetest.ocp\\peteadmin"
     },
-    "SQLAgentPassword": {
-      "value": "<SQLAGENTPASSWORD>"
+    "sqlAgentPassword": {
+      "value": "0cpR0ckz"
     },
-    "SQLSAAccountPassword": {
-      "value": "<SQLSAACCOUNTPASSWORD>"
+    "sqlSAAccountPassword": {
+      "value": "0cpR0ckz"
     },
-    "SQLServiceUserName": {
-      "value": "<DOMAIN\\USERNAME>"
+    "sqlServiceUserName": {
+      "value": "petetest.ocp\\peteadmin"
     },
-    "SQLServicePassword": {
-      "value": "<SQLSERVICEPASSWORD>"
+    "sqlServicePassword": {
+      "value": "0cpR0ckz"
     },
-    "Features": {
-      "value": "SQLENGINE,FULLTEXT" //SQL Features you want installed 
+    "features": {
+      "value": "SQLENGINE,FULLTEXT" 
     },
-    "UpdateSource": {
+    "productKey": {
+      "value": "XXXXX-XXXXX-XXXXX-XXXXX-XXXXX" 
+    },
+    "updateSource": {
       "value": "MU"
     },
-    "UpdateEnabled": {
+    "updateEnabled": {
       "value": "False"
     },
-    "InstallSharedDir": {
-      "value": "C:\\Program Files\\Microsoft SQL Server"
+    "installSharedDir": {
+      "value": "G:\\Microsoft SQL Server"
     },
-    "InstallSharedWOWDir": {
+    "installSharedWOWDir": {
       "value": "C:\\Program Files (x86)\\Microsoft SQL Server"
     },
-    "SQLInstanceName": {
+    "sqlInstanceName": {
       "value": "MSSQLSERVER"
     },
-    "SQLInstanceDir": {
-      "value": "C:\\Microsoft SQL Server\\MSSQLSERVER"
+    "sqlInstanceDir": {
+      "value": "G:\\Microsoft SQL Server\\MSSQLSERVER"
     },
-    "SecurityMode": {
+    "sqlUserDBDir": {
+      "value": "F:\\MSSQLSERVER\\DATA"
+    },
+    "sqlUserDBLogDir": {
+      "value": "I:\\MSSQLSERVER\\LOG"
+    },
+    "sqlTempDBDir": {
+      "value": "T:\\MSSQLSERVER\\TempDB"
+    },
+    "sqlTempDBLogDir": {
+      "value": "M:\\MSSQLSERVER\\TempDB"
+    },
+    "sqlBackupDir": {
+      "value": "O:\\MSSQLSERVER\\Backup"
+    },
+    "sqlCollation": {
+      "value": "SQL_Latin1_General_CP1_CI_AS"
+    },
+    "securityMode": {
       "value": "SQL"
     },
-    "SQLSysAdminAccounts": {
+    "sqlSysAdminAccounts": {
       "value": "BUILTIN\\Administrators"
+    },
+    "workloadType": {
+      "value": "GENERAL"
+    },
+    "licenseType" : {
+      "value": "Windows_Server"
+    },
+    "maxDegreeOfParallelism": {
+      "value": 4
+    },
+    "OSReservedMemoryInGB" : {
+      "value": 4
+    },
+    "zones" : {
+      "value" : [
+        "1"
+      ]
     }
   }
 }

@@ -1,0 +1,26 @@
+#pragma namespace("\\\\.\\root\\microsoft\\windows\\DesiredStateConfiguration")
+
+[ClassVersion("1.0.0"), FriendlyName("xSqlCreateVirtualDataDisk")] 
+class MicrosoftAzure_xSqlCreateVirtualDataDisk : OMI_BaseResource
+{
+    [write, Description("The number of disks.")]
+    Uint32 NumberOfDisks;
+
+    [write, Description("The number of columns.")]
+    Uint32 NumberOfColumns;
+    
+    [required, Description("The letters of each virtual disk.")]
+    string DiskLetters[];
+    
+    [required, Description("The sizes of each virtual disk.")]
+    string DiskSizes[];
+    
+    [required, Description("Storage Optimization Type")]
+    string OptimizationType;
+
+    [key, Description("The starting device id of disks.")]
+    Uint32 StartingDeviceID;
+
+    [write, Description("The flag to indicate if a virtual machine reboot is needed or not")]
+    boolean RebootVirtualMachine;
+};

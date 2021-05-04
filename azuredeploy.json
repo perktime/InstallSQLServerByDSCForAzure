@@ -9,157 +9,214 @@
       "type": "string",      
       "defaultValue": "Standard_DS2_v2"
     },
-    "assetLocation": {
+    "_artifactsLocation": {
       "type": "string",
       "metadata": {
-        "description": "The artifacts location URI"
-      }
+        "description": "Location of resources that the script is dependent on such as linked templates and DSC modules"
+      },
+      "defaultValue": "https://mystorage.file.core.windows.net/"
     },
-    "FileShareUserName": {
+    "_artifactsLocationSasToken": {
+      "type": "string",
+      "metadata": {
+        "description": "The sasToken required to access _artifactsLocation.  When the template is deployed using the accompanying scripts, a sasToken will be automatically generated."
+      },
+      "defaultValue": "?sv=2017-07-29&ss=bfqt&srt=sco&sp=rwdlacup&se=2018-04-13T11:38:03Z&st=2018-04-13T03:38:03Z&spr=https&sig=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+    },
+    "fileShareUserName": {
       "type": "string",
       "metadata": {
         "description": "User name for file share"
       }
     },
-    "FileSharePassword": {
+    "fileSharePassword": {
       "type": "securestring",
       "metadata": {
         "description": "Password for file share"
       }
     },
-    "AdminUserName": {
+    "adminUserName": {
       "type": "string",
       "metadata": {
         "description": "User name of local admin for SQL Server Setup"
       }
     },
-    "AdminPassword": {
+    "adminPassword": {
       "type": "securestring",
       "metadata": {
         "description": "Password of local admin for SQL Server Setup"
       }
     },
-    "SQLAgentUserName": {
+    "sqlAgentUserName": {
       "type": "string",
       "metadata": {
         "description": "User name for SQL Server Agent"
       }
     },
-    "SQLAgentPassword": {
+    "sqlAgentPassword": {
       "type": "securestring",
       "metadata": {
         "description": "Password for SQL Server Agent"
       }
     },
-    "SQLSAAccountPassword": {
+    "sqlSAAccountPassword": {
       "type": "securestring",
       "metadata": {
         "description": "Password for SQL Server SA Account"
       }
     },
-    "SQLServiceUserName": {
+    "sqlServiceUserName": {
       "type": "string",
       "metadata": {
         "description": "User name for SQL Server Service"
       }
     },
-    "SQLServicePassword": {
+    "sqlServicePassword": {
       "type": "securestring",
       "metadata": {
         "description": "Password for SQL service"
       }
     },
-    "DomainUserName": {
+    "domainUserName": {
       "type": "string",
       "metadata": {
         "description": "User name for AD Domain"
       }
     },
-    "DomainPassword": {
+    "domainPassword": {
       "type": "securestring",
       "metadata": {
         "description": "Password for AD user"
       }
     },
-    "InstallDir": {
+    "installDir": {
       "type": "string",
       "metadata": {
         "description": "Install directory on the file share"
       }
     },
-    "PackagePath": {
+    "packagePath": {
       "type": "string",
       "metadata": {
         "description": "UNC path for file share"
-      }    },
+      }    
+    },
     "location": {
       "type": "string",      
       "metadata": {
         "description": "Region in which to deploy the new resources"
       }
     },
-
-    "Features": {
+    "features": {
       "type": "string",
       "metadata": {
         "description": "The installation features for SQL Server"
       },
       "defaultValue": "SQLENGINE,FULLTEXT"
     },
-    "UpdateSource": {
+    "productKey": {
+      "type": "string",
+      "metadata": {
+        "description": "The SQL Server Product Key. Warning: default value is for SQL 2016 Developer Edition which is not licensed for production use."
+      },
+      "defaultValue": "22222-00000-00000-00000-00000"
+    },
+    "updateSource": {
       "type": "string",
       "metadata": {
         "description": "The type of update source"
       },
       "defaultValue": "MU"
     },
-    "UpdateEnabled": {
+    "updateEnabled": {
       "type": "string",
       "metadata": {
         "description": "Enable/Disable SQL Server update"
       },
       "defaultValue": "False"
     },
-    "InstallSharedDir": {
+    "installSharedDir": {
       "type": "string",
       "metadata": {
         "description": "The common installation directory for SQL Server"
       },
       "defaultValue": "C:\\Program Files\\Microsoft SQL Server"
     },
-    "InstallSharedWOWDir": {
+    "installSharedWOWDir": {
       "type": "string",
       "metadata": {
         "description": "The 32-bit installation directory for SQL Server"
       },
       "defaultValue": "C:\\Program Files (x86)\\Microsoft SQL Server"
     },
-    "SQLInstanceName": {
+    "sqlInstanceName": {
       "type": "string",
       "metadata": {
         "description": "The instance name for SQL Server"
       },
       "defaultValue": "default"
     },
-    "SQLInstanceDir": {
+    "sqlInstanceDir": {
       "type": "string",
       "metadata": {
         "description": "The instance directory for SQL Server"
       }
     },
-    "SecurityMode": {
+    "securityMode": {
       "type": "string",
       "metadata": {
         "description": "The security mode for SQL Server"
       },      
       "defaultValue": "Windows"
     },
-    "SQLSysAdminAccounts": {
+    "sqlSysAdminAccounts": {
       "type": "string",
       "metadata": {
         "description": "The users/groups that will be sysadmins for SQL Server"
       },
       "defaultValue": "BUILTIN\\Administrators"
+    },   
+    "sqlUserDBDir": {
+      "type": "string",
+      "metadata": {
+        "description": "The directory for User databases for SQL Server"
+      },
+      "defaultValue": "C:\\Program Files\\Microsoft SQL Server\\MSSQLSERVER\\DATA"
+    },
+    "sqlUserDBLogDir": {
+      "type": "string",
+      "metadata": {
+        "description": "The directory for User database logs for SQL Server"
+      },
+      "defaultValue": "C:\\Program Files\\Microsoft SQL Server\\MSSQLSERVER\\LOG"
+    },
+    "sqlTempDBDir": {
+      "type": "string",
+      "metadata": {
+        "description": "The directory for the TempDB for SQL Server"
+      },
+      "defaultValue": "C:\\Program Files\\Microsoft SQL Server\\MSSQLSERVER\\TempDB"
+    },
+    "sqlTempDBLogDir": {
+      "type": "string",
+      "metadata": {
+        "description": "The directory for the TempDB log for SQL Server"
+      },
+      "defaultValue": "C:\\Program Files\\Microsoft SQL Server\\MSSQLSERVER\\TempDB"
+    },
+    "sqlBackupDir": {
+      "type": "string",
+      "metadata": {
+        "description": "The directory for backup for SQL Server"
+      },
+      "defaultValue": "C:\\Program Files\\Microsoft SQL Server\\MSSQLSERVER\\Backup"
+    },
+    "sqlCollation": {
+      "type": "string",
+      "metadata": {
+        "description": "The collation for SQL Server"
+      },
+      "defaultValue": "SQL_Latin1_General_CP1_CI_AS"
     },
     "existingDomainName": {
       "type": "string",
@@ -191,12 +248,6 @@
         "description": "Name of the subnet in the virtual network you want to use"
       }
     },
-    "storageAccountUri": {
-      "type": "string",
-      "metadata": {
-        "description": "Storage Account URI (e.g. https://storageaccount.blob.core.windows.net)"
-      }
-    },
     "bootdiagnosticsstorageAccountUri": {
       "type": "string",
       "metadata": {
@@ -205,26 +256,107 @@
     },
     "windowsOSVersion": {
       "type": "string",
-      "defaultValue": "2012-R2-Datacenter",     
+      "defaultValue": "2016-Datacenter",     
       "metadata": {
         "description": "The Windows version for the VM. This will pick a fully patched image of this given Windows version."
       }
-    }    
+    },    
+    "numDataDisks": {
+      "type": "int",
+      "metadata": {
+        "description": "The number of disks to add to the VM. These disks will have ReadOnly caching enabled"
+      }
+    },
+    "numLogDisks": {
+      "type": "int",
+      "metadata": {
+        "description": "The number of disks to add to the VM. These disks will have no caching enabled"
+      }
+    },
+    "osDiskSizeGB": {
+      "type":"int",
+      "metadata": {
+        "description": "The size of the OS Disk for the VM"
+      }
+    },
+    "dataDiskSizeGB": {
+      "type":"int",
+      "metadata": {
+        "description": "The size of the disk(s) to add to the VM"
+      }
+    },
+    "dataDiskLetters": {
+      "type": "array",
+      "metadata": {
+        "description": "The disk letters for the data drives in the storage pool"
+      }
+    },
+    "dataDiskSizes": {
+      "type": "array",
+      "metadata": {
+        "description": "The disk sizes for the data drives in the storage pool"
+      }
+    },
+    "logDiskLetters": {
+      "type": "array",
+      "metadata": {
+        "description": "The disk letters for the log drives in the storage pool"
+      }
+    },
+    "logDiskSizes": {
+      "type": "array",
+      "metadata": {
+        "description": "The disk sizes for the log drives in the storage pool"
+      }
+    },
+    "workloadType": {
+      "type": "string",
+      "defaultValue": "GENERAL",     
+      "metadata": {
+        "description": "The workload type for SQL Server (e.g. GENERAL or OLTP)."
+      }
+    },
+    "licenseType" : {
+      "type" : "string",
+      "allowedValues": [
+        "Windows_Server",
+        ""
+      ],
+      "metadata": {
+        "description" : "The Windows license type"
+      },
+      "defaultValue": "Windows_Server"
+    },
+    "maxDegreeOfParallelism": {
+      "type": "int",      
+      "metadata": {
+        "description": "The maximum degree of parallelism"
+      }
+    },
+    "OSReservedMemoryInGB" : {
+      "type": "int",      
+      "metadata": {
+        "description": "The amount of memory reserved for the OS separate from SQL Server"
+      }
+    },
+    "zones": {
+      "type": "array",
+      "metadata": {
+        "description": "The availability zone for the VM"
+      }
+    }
+
   },
   "variables": {
     "apiVersion": "2015-01-01",
-    "apiVersionNetworks": "2015-06-15",
-    "apiVersionVirtualMachines": "2015-06-15",
-    "apiVersionVMExtensions": "2015-06-15",
-    "apiVersionStorage": "2015-06-15",
-    "assetLocation": "[parameters('assetLocation')]",
-    "sqlDSCModuleUrl": "[concat(parameters('assetLocation'), 'SQLInstall.ps1.zip')]",
+    "apiVersionNetworks": "2015-06-15",    
+    "apiVersionVMExtensions": "2018-10-01",        
+    "sqlDSCModuleUrl": "[concat(parameters('_artifactsLocation'), '/dsc/','SQLInstall.ps1.zip', parameters('_artifactsLocationSasToken'))]",
     "sqlDSCConfigurationFunction": "SQLInstall.ps1\\SQLInstall",
     "domainName": "[parameters('existingDomainName')]",
     "OUPath": "[parameters('existingOUPath')]",
-    "deployWindowsVMTemplateUrl": "[concat(parameters('assetLocation'),'DeployWindowsVM.json')]",
-    "deployWindowsVM": "deployWindowsVM",
-    "deployWindowsVmId": "[concat('Microsoft.Compute/VirtualMachines/', parameters('vmName'))]"
+    "deployWindowsVMTemplateUrl": "[concat(parameters('_artifactsLocation'), '/nested/' , 'DeployWindowsVM.json', parameters('_artifactsLocationSasToken'))]",
+    "deployWindowsVM": "deployWindowsVM"   
 
   },
 
@@ -242,16 +374,22 @@
         },
 
         "parameters": {
-          "location": { "value": "[parameters('location')]" },
-          "AdminUserName": { "value": "[parameters('AdminUserName')]" },
-          "adminPassword": { "value": "[parameters('adminPassword')]" },
-          "storageAccountUri": { "value": "[parameters('storageAccountUri')]" },
+          "location": { "value": "[parameters('location')]" },   
+          "osDiskSizeGB" : {"value":"[parameters('osDiskSizeGB')]"},                    
+          "dataDiskSizeGB" : {"value":"[parameters('dataDiskSizeGB')]"},                   
+          "windowsOSVersion" : { "value" : "[parameters('windowsOSVersion')]"},
+          "adminUserName": { "value": "[parameters('adminUserName')]" },
+          "adminPassword": { "value": "[parameters('adminPassword')]" },          
           "existingVirtualNetworkName": { "value": "[parameters('existingVirtualNetworkName')]" },
           "existingVirtualNetworkResourceGroup": { "value": "[parameters('existingVirtualNetworkResourceGroup')]" },         
           "subnetName": { "value": "[parameters('subnetName')]" },
           "vmName": { "value": "[parameters('vmName')]" },
-          "vmSize": { "value": "[parameters('vmSize')]" },
-          "bootdiagnosticsstorageAccountUri": { "value": "[parameters('bootdiagnosticsstorageAccountUri')]" }
+          "vmSize": { "value": "[parameters('vmSize')]" },    
+          "numDataDisks" :{ "value": "[parameters('numDataDisks')]" },    
+          "numLogDisks" : { "value": "[parameters('numLogDisks')]" },        
+          "bootdiagnosticsstorageAccountUri": { "value": "[parameters('bootdiagnosticsstorageAccountUri')]" },
+          "licenseType" : {"value" : "[parameters('licenseType')]"},
+          "zones" : {"value": "[parameters('zones')]"}
         }
       }
     },
@@ -266,32 +404,32 @@
       "properties": {
         "publisher": "Microsoft.Powershell",
         "type": "DSC",
-        "typeHandlerVersion": "2.20",
+        "typeHandlerVersion": "2.77",
         "autoUpgradeMinorVersion": true,
         "settings": {
           "wmfVersion": "latest",
           "modulesUrl": "[variables('sqlDSCModuleUrl')]",
           "configurationFunction": "[variables('sqlDSCConfigurationFunction')]",
           "properties": {
-            "PackagePath": "[parameters('PackagePath')]",
+            "PackagePath": "[parameters('packagePath')]",
             "AdminCreds": {
-              "UserName": "[parameters('AdminUserName')]",
+              "UserName": "[parameters('adminUserName')]",
               "Password": "PrivateSettingsRef:adminPassword"
             },
             "DomainCreds": {
-              "UserName": "[parameters('DomainUserName')]",
-              "Password": "PrivateSettingsRef:DomainPassword"
+              "UserName": "[parameters('domainUserName')]",
+              "Password": "PrivateSettingsRef:domainPassword"
             },
             "FileShareCreds": {
-              "UserName": "[parameters('FileShareUserName')]",
+              "UserName": "[parameters('fileShareUserName')]",
               "Password": "PrivateSettingsRef:fileSharePassword"
             },
             "SQLAgentCreds": {
-              "UserName": "[parameters('SQLAgentUserName')]",
+              "UserName": "[parameters('sqlAgentUserName')]",
               "Password": "PrivateSettingsRef:sqlAgentPassword"
             },
             "SQLServiceCreds": {
-              "UserName": "[parameters('SQLServiceUserName')]",
+              "UserName": "[parameters('sqlServiceUserName')]",
               "Password": "PrivateSettingsRef:sqlServicePassword"
             },
             "SQLSAAccountCreds": {
@@ -299,28 +437,44 @@
               "Password": "PrivateSettingsRef:sqlSAAccountPassword"
             },
 
-            "InstallDir": "[parameters('InstallDir')]",
-            "Features": "[parameters('Features')]",
-            "UpdateSource": "[parameters('UpdateSource')]",
-            "UpdateEnabled": "[parameters('UpdateEnabled')]",
-            "InstallSharedDir": "[parameters('InstallSharedDir')]",
-            "InstallSharedWOWDir": "[parameters('InstallSharedWOWDir')]",
-            "SQLInstanceName": "[parameters('SQLInstanceName')]",
-            "SQLInstanceDir": "[parameters('SQLInstanceDir')]",
-            "SecurityMode": "[parameters('SecurityMode')]",
-            "SQLSysAdminAccounts": "[parameters('SQLSysAdminAccounts')]",
+            "InstallDir": "[parameters('installDir')]",
+            "Features": "[parameters('features')]",
+            "UpdateSource": "[parameters('updateSource')]",
+            "UpdateEnabled": "[parameters('updateEnabled')]",
+            "InstallSharedDir": "[parameters('installSharedDir')]",
+            "InstallSharedWOWDir": "[parameters('installSharedWOWDir')]",
+            "SQLInstanceName": "[parameters('sqlInstanceName')]",
+            "SQLInstanceDir": "[parameters('sqlInstanceDir')]",
+            "ProductKey" : "[parameters('productKey')]", 
+            "SecurityMode": "[parameters('securityMode')]",
+            "SQLSysAdminAccounts": "[parameters('sqlSysAdminAccounts')]",
+            "SQLUserDBDir": "[parameters('sqlUserDBDir')]",
+            "SQLUserDBLogDir": "[parameters('sqlUserDBLogDir')]",
+            "SQLTempDBDir": "[parameters('sqlTempDBDir')]",
+            "SQLTempDBLogDir": "[parameters('sqlTempDBLogDir')]",
+            "SQLBackupDir": "[parameters('sqlBackupDir')]",
+            "SQLCollation": "[parameters('sqlCollation')]",             
             "DomainName": "[variables('domainName')]",
-            "OUPath": "[variables('OUPath')]"            
+            "OUPath": "[variables('ouPath')]",
+            "NumberOfDataDisks" : "[parameters('numDataDisks')]",
+            "NumberOfLogDisks" : "[parameters('numLogDisks')]", 
+            "DataDiskLetters":"[parameters('dataDiskLetters')]",
+            "DataDiskSizes":"[parameters('dataDiskSizes')]",
+            "LogDiskLetters": "[parameters('logDiskLetters')]",
+            "LogDiskSizes":"[parameters('logDiskSizes')]",
+            "WorkloadType":"[parameters('WorkloadType')]",
+            "maxDegreeOfParallelism": "[parameters('maxDegreeOfParallelism')]",
+            "OSReservedMemoryInGB": "[parameters('OSReservedMemoryInGB')]"
           }
         },
         "protectedSettings": {
           "items": {
-            "adminPassword": "[parameters('AdminPassword')]",
-            "domainPassword": "[parameters('DomainPassword')]",
-            "fileSharePassword": "[parameters('FileSharePassword')]",
-            "sqlAgentPassword": "[parameters('SQLAgentPassword')]",
-            "sqlServicePassword": "[parameters('SQLServicePassword')]",
-            "sqlSAAccountPassword": "[parameters('SQLSAAccountPassword')]"
+            "adminPassword": "[parameters('adminPassword')]",
+            "domainPassword": "[parameters('domainPassword')]",
+            "fileSharePassword": "[parameters('fileSharePassword')]",
+            "sqlAgentPassword": "[parameters('sqlAgentPassword')]",
+            "sqlServicePassword": "[parameters('sqlServicePassword')]",
+            "sqlSAAccountPassword": "[parameters('sqlSAAccountPassword')]"
           }
         }
       }
